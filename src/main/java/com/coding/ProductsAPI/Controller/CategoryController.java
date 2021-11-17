@@ -1,0 +1,12 @@
+package com.coding.ProductsAPI.Controller;
+
+import com.coding.ProductsAPI.DAO.CategoryDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class CategoryController {
+
+    @Autowired
+    CategoryDAO categoryService;
+}
