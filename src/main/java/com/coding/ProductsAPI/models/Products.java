@@ -1,6 +1,9 @@
 package com.coding.ProductsAPI.models;
 
-import java.sql.Date;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Products {
 
@@ -40,8 +43,8 @@ public class Products {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedAt() {
+        this.createdAt = new Date();
     }
 
     public Integer getCategoryId() {
