@@ -19,23 +19,23 @@ public class ProductsDAO {
         return jdbcTemplate.query("SELECT * FROM Products", BeanPropertyRowMapper.newInstance(Products.class));
     }
 
-    public List<Products> readById(Integer id) {
-        String sql = "SELECT * FROM Products WHERE id = ?" ;
-        return jdbcTemplate.query(sql,BeanPropertyRowMapper.newInstance(Products.class),id);
+    public Products readById(Integer id) {
+        String sql = "SELECT * FROM Products WHERE id=? ;";
+        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Products.class), id);
     }
 
-    public void update(Integer id, Products prod) {
+    public int update(Integer id, Products prod) {
         String sql = "UPDATE Products SET type = ?, rating = ?, name = ?, categoryId = ? WHERE id = ?;";
-        jdbcTemplate.update(sql, prod.getType(), prod.getRating(), prod.getName(), prod.getCategoryId(), id);
+        return jdbcTemplate.update(sql, prod.getType(), prod.getRating(), prod.getName(), prod.getCategoryId(), id);
     }
 
-    public void delete(Integer id){
+    public int delete(Integer id){
         String sql = "DELETE FROM Products WHERE id = ?;";
-        jdbcTemplate.update(sql, id);
+        return jdbcTemplate.update(sql, id);
     }
 
-    public void add(Products prod) {
+    public int add(Products prod) {
         String sql = "INSERT INTO Products (type, rating, name, categoryId) VALUES (?, ?, ?, ?);";
-        jdbcTemplate.update(sql, prod.getType(), prod.getRating(), prod.getName(), prod.getCategoryId());
+        return jdbcTemplate.update(sql, prod.getType(), prod.getRating(), prod.getName(), prod.getCategoryId());
     }
 }
