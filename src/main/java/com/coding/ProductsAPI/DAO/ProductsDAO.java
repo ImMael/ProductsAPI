@@ -19,6 +19,15 @@ public class ProductsDAO {
         return jdbcTemplate.query("SELECT * FROM Products", BeanPropertyRowMapper.newInstance(Products.class));
     }
 
+    public List<Products> pagingAll(String range){
+
+            String[] TbValue = range.split("-");
+            int valeur1 = Integer.parseInt(TbValue[1]);
+            int valeur2 = Integer.parseInt(TbValue[0]);
+
+            return jdbcTemplate.query("SELECT * FROM Products LIMIT ? OFFSET ?", BeanPropertyRowMapper.newInstance(Products.class), valeur1 - 1, valeur2 - 1);
+    }
+
     public Products readById(Integer id) {
         String sql = "SELECT * FROM Products WHERE id=? ;";
         return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Products.class), id);

@@ -4,6 +4,8 @@ import com.coding.ProductsAPI.DAO.ProductsDAO;
 import com.coding.ProductsAPI.models.Products;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +17,17 @@ import java.util.Properties;
 public class ProductsController {
 
     @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
     ProductsDAO productsService;
 
     @GetMapping("")
-    public @ResponseBody List<Products> index(){
-        return productsService.readAll();
+    public @ResponseBody List<Products> index(@RequestParam(value= "range", required = false) String range){
+       if(range == null){
+           return productsService.readAll();
+       } else {
+           return productsService.pagingAll(range);
+           }
     }
 
     @GetMapping("/{id}")
@@ -56,4 +64,6 @@ public class ProductsController {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
+
+
 }
