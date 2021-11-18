@@ -10,23 +10,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Properties;
 
-@Controller
+@RestController
+@RequestMapping("/products")
 public class ProductsController {
 
     @Autowired
     ProductsDAO productsService;
 
-    @GetMapping("/products")
+    @GetMapping("")
     public @ResponseBody List<Products> index(){
         return productsService.readAll();
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/{id}")
     public @ResponseBody Products getProduct(@PathVariable("id") Integer id){
         return productsService.readById(id);
     }
 
-    @PutMapping("/products/{id}")
+    @PutMapping("/{id}")
     public @ResponseBody HttpStatus editProduct(@RequestBody Products body, @PathVariable("id") Integer id){
         Integer res = productsService.update(id, body);
         if(res == 1){
@@ -35,7 +36,7 @@ public class ProductsController {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     public @ResponseBody
     HttpStatus deleteProduct(@PathVariable("id") Integer id){
         Integer res = productsService.delete(id);
@@ -46,7 +47,7 @@ public class ProductsController {
         }
     }
 
-    @PostMapping("/products")
+    @PostMapping("")
     public @ResponseBody HttpStatus addProduct(@RequestBody Products body){
         Integer res = productsService.add(body);
         if(res == 1){
