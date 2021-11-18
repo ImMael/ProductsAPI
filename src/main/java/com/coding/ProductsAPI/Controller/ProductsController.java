@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @RestController
@@ -37,12 +38,12 @@ public class ProductsController {
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody Products getProduct(@PathVariable("id") Integer id){
+    public Products getProduct(@PathVariable("id") Integer id){
         return productsService.readById(id);
     }
 
     @PutMapping("/{id}")
-    public @ResponseBody HttpStatus editProduct(@RequestBody Products body, @PathVariable("id") Integer id){
+    public HttpStatus editProduct(@RequestBody Products body, @PathVariable("id") Integer id){
         Integer res = productsService.update(id, body);
         if(res == 1){
             return HttpStatus.OK;
@@ -51,8 +52,7 @@ public class ProductsController {
         }
     }
     @DeleteMapping("/{id}")
-    public @ResponseBody
-    HttpStatus deleteProduct(@PathVariable("id") Integer id){
+    public HttpStatus deleteProduct(@PathVariable("id") Integer id){
         Integer res = productsService.delete(id);
         if(res == 1){
             return HttpStatus.NO_CONTENT;
@@ -62,7 +62,7 @@ public class ProductsController {
     }
 
     @PostMapping("")
-    public @ResponseBody HttpStatus addProduct(@RequestBody Products body){
+    public HttpStatus addProduct(@RequestBody Products body){
         Integer res = productsService.add(body);
         if(res == 1){
             return HttpStatus.CREATED;
@@ -71,5 +71,13 @@ public class ProductsController {
         }
     }
 
-
+    @GetMapping("/search")
+    public List<Products> search(@RequestParam Map<String,String> allParams){
+        if(allParams!= null){
+            if(allParams.containsKey("type") || allParams.containsKey("name") || allParams.containsKey("rating") || allParams.containsKey("sort")){
+                return productsService.searchProducts(allParams);
+            }
+        }
+        return productsService.readAll();
+    }
 }

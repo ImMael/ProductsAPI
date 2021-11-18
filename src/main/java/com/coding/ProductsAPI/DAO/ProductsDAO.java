@@ -6,8 +6,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductsDAO {
@@ -54,5 +56,54 @@ public class ProductsDAO {
     public int add(Products prod) {
         String sql = "INSERT INTO Products (type, rating, name, categoryId) VALUES (?, ?, ?, ?);";
         return jdbcTemplate.update(sql, prod.getType(), prod.getRating(), prod.getName(), prod.getCategoryId());
+    }
+
+    public List<Products> searchProducts(Map<String, String> allParams) {
+        // Alban
+        String rating = "";
+        String type = "";
+        String name = "";
+        String sort = "id";
+        String sql;
+
+        ArrayList value = new ArrayList() ;
+        ArrayList condition = new ArrayList() ;
+
+        if(allParams.containsKey("rating")){
+            rating = allParams.get("rating");
+            condition.add("rating = ?");
+            value.add(rating);
+        }
+        if(allParams.containsKey("type")){
+            type = allParams.get("type");
+            condition.add("type = ?");
+            value.add(type);
+        }
+        if(allParams.containsKey("name")){
+            name = allParams.get("name");
+            condition.add("name = ?");
+            value.add(name);
+        }
+        if(allParams.containsKey("sort")){
+            sort = allParams.get("sort");
+        }
+
+        List<Products> list = new ArrayList<>();
+        int valueSize = value.size();
+        switch (valueSize){
+            case 1:
+                sql = "SELECT * FROM Products WHERE "+condition.get(0) + "ORDER BY "+sort;
+                list = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Products.class), value.get(0));
+                break;
+            case 2:
+                sql = "SELECT * FROM Products WHERE "+condition.get(0)+" AND "+condition.get(1) + "ORDER BY "+sort;
+                list = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Products.class),value.get(0),value.get(1));
+                break;
+            case 3:
+                sql = "SELECT * FROM Products WHERE "+condition.get(0)+" AND "+condition.get(1)+" AND "+condition.get(2) + "ORDER BY "+sort;
+                list = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Products.class),value.get(0),value.get(1),value.get(2));
+                break;
+        }
+        return list;
     }
 }
