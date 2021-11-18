@@ -18,6 +18,14 @@ public class ProductsDAO {
     public List<Products> readAll(){
         return jdbcTemplate.query("SELECT * FROM Products", BeanPropertyRowMapper.newInstance(Products.class));
     }
+    public List<Products> sortAll(String desc,String asc){
+
+        String sql = "SELECT * FROM Products ORDER BY "+ desc +" desc , "+asc+" asc";
+        System.out.println(sql);
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Products.class));
+
+    }
+
 
     public List<Products> pagingAll(String range){
 

@@ -22,11 +22,17 @@ public class ProductsController {
     ProductsDAO productsService;
 
     @GetMapping("")
-    public @ResponseBody List<Products> index(@RequestParam(value= "range", required = false) String range){
-       if(range == null){
-           return productsService.readAll();
-       } else {
+    public @ResponseBody List<Products> index(@RequestParam(value= "range", required = false) String range,
+                                              @RequestParam(value= "asc", required = false) String asc,
+                                              @RequestParam(value= "desc", required = false) String desc){
+       if(range != null){
            return productsService.pagingAll(range);
+       }
+       if(asc != null || desc != null){
+            return productsService.sortAll(desc,asc);
+       }
+       else {
+           return productsService.readAll();
            }
     }
 
