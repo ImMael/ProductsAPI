@@ -1,0 +1,10 @@
+MAEL:   Controller Products et Controller Category
+        Crud --> Create, Read by ID, Read All, Update, Delete
+        Recherche --> searchProducts(Map<String, String> allParams)
+        Test unitaire
+        SwaggeUi
+
+ALLAN:  Pagination --> pagingAll(String range)
+        Tri --> sortAll(String desc,String asc)
+
+        Condition if du GetMapping("") du ProductsController
